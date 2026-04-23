@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <title>Ziddi Trader · Live Forex</title>
+  <meta name="description" content="live MT5 account. fully automated." />
+  <meta property="og:title" content="Ziddi Trader — Live Forex Algorithm" />
+  <meta property="og:description" content="watch my live MT5 account." />
+  <meta property="og:image" content="./assets/LOGO.jpg" />
+
+  <link rel="icon" type="image/jpeg" href="./assets/LOGO.jpg" />
+  <link rel="apple-touch-icon" href="./assets/LOGO.jpg" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0a0a0a',
+            paper: '#e8e6e0',
+            lime: '#d9ff00',
+            blood: '#ff3a3a',
+            dim: '#8a8a83'
+          },
+          fontFamily: {
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+            sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    html,
+    body {
+      background: #0a0a0a;
+      color: #e8e6e0;
+    }
+
+    body {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: env(safe-area-inset-bottom);
+      overflow-x: hidden;
+    }
+
+    /* Film-grain noise, very subtle */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.91  0 0 0 0 0.90  0 0 0 0 0.87  0 0 0 0.04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      pointer-events: none;
+      opacity: 0.6;
+      z-index: 1;
+      mix-blend-mode: overlay;
+    }
+
+    main,
+    header,
+    footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Ticker */
+    @keyframes ticker {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .ticker-track {
+      animation: ticker 22s linear infinite;
+      will-change: transform;
+    }
+
+    /* Reveal animation */
+    .reveal-hidden {
+      display: none;
+    }
+
+    .reveal-show {
+      animation: slideUp .6s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Terminal price flash */
+    .flash-up {
+      animation: flashUp .45s ease both;
+    }
+
+    .flash-down {
+      animation: flashDown .45s ease both;
+    }
+
+    @keyframes flashUp {
+      0% {
+        background: rgba(217, 255, 0, 0.25);
+      }
+
+      100% {
+        background: transparent;
+      }
+    }
+
+    @keyframes flashDown {
+      0% {
+        background: rgba(255, 58, 58, 0.25);
+      }
+
+      100% {
+        background: transparent;
+      }
+    }
+
+    /* Execution row slide-in */
+    .exec-enter {
+      animation: execIn .4s ease both;
+    }
+
+    @keyframes execIn {
+      from {
+        opacity: 0;
+        transform: translateX(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Scanline on canvas */
+    .scan::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(217, 255, 0, 0.015) 0 2px, transparent 2px 4px);
+      pointer-events: none;
+    }
+
+    /* Sticker (reveal card) */
+    .sticker {
+      transform: rotate(0.8deg);
+      box-shadow: 0 20px 40px -10px rgba(217, 255, 0, 0.25), 0 0 0 2px #d9ff00;
+    }
+
+    /* Inputs underline style */
+    .input-field {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid rgba(232, 230, 224, 0.25);
+      border-radius: 0;
+      padding: 14px 2px 10px;
+      transition: border-color .2s;
+      font-size: 18px;
+      color: #e8e6e0;
+    }
+
+    .input-field::placeholder {
+      color: #5a5a54;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-bottom-color: #d9ff00;
+    }
+
+    .input-error {
+      border-bottom-color: #ff3a3a !important;
+    }
+
+    /* Accent highlight — solid lime block behind the amount, slight tilt */
+    .accent {
+      display: inline-block;
+      padding: 0 0.14em 0.02em;
+      background: #d9ff00;
+      color: #0a0a0a;
+      transform: rotate(-1.2deg);
+      transform-origin: center;
+      white-space: nowrap;
+    }
+
+    /* Dashed lime underline */
+    .squiggle {
+      background-image: linear-gradient(90deg, #d9ff00 0 50%, transparent 50%);
+      background-size: 10px 0.22em;
+      background-position: 0 100%;
+      background-repeat: repeat-x;
+      padding-bottom: 0.16em;
+    }
+
+    /* Copy button */
+    .copy-btn.copied {
+      background: #d9ff00 !important;
+      color: #0a0a0a !important;
+    }
+
+    /* Disable tap highlight */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Hide number spinners */
+    input[type=tel]::-webkit-outer-spin-button,
+    input[type=tel]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Torn edge effect for sticker top */
+    .torn-top {
+      --t: 8px;
+      -webkit-mask: radial-gradient(var(--t) at 50% calc(100% - var(--t)), #000 98%, #0000) 50% 100%/18px 100% repeat-x, linear-gradient(#000 0 0);
+      -webkit-mask-composite: source-over;
+      mask-composite: add;
+    }
+
+    /* Profit pill: reveal + gentle glow pulse */
+    .pill-hidden {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    .pill-reveal {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+      animation: pillGlow 2.8s ease-in-out 0.6s infinite;
+    }
+
+    @keyframes pillGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(217, 255, 0, 0); }
+      50%      { box-shadow: 0 0 18px 2px rgba(217, 255, 0, 0.28); }
+    }
+
+    /* Respect reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .pill-hidden, .pill-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-ink">
+
+  <!-- TICKER -->
+  <div class="w-full bg-lime text-ink overflow-hidden border-b border-ink/20">
+    <div id="ticker"
+      class="ticker-track flex whitespace-nowrap py-2 font-mono font-semibold text-[11px] tracking-widest">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <!-- TOP META -->
+  <header class="px-5 pt-5 max-w-[480px] mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <img data-bind-src="brand.logo" data-bind-alt="brand.name"
+        class="w-10 h-10 rounded-md object-cover border border-paper/10 shadow-[0_0_20px_-8px_rgba(245,192,74,0.4)]" />
+      <div class="flex flex-col min-w-0">
+        <span class="font-serif italic text-[18px] text-paper leading-none truncate" data-bind="brand.name">Ziddi Trader</span>
+        <span class="font-mono text-[9px] text-dim uppercase tracking-wider mt-1 truncate" data-bind="brand.handle">@ziditrader</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-paper/70 shrink-0">
+      <span class="w-1.5 h-1.5 bg-blood rounded-full animate-pulse"></span>
+      <span>live</span>
+    </div>
+  </header>
+
+  <main class="max-w-[480px] mx-auto px-5 pb-12">
+
+    <!-- HERO -->
+    <section class="pt-10">
+      <h1 class="font-serif text-paper tracking-tight">
+        <span class="block text-[clamp(36px,10vw,52px)] leading-[1]" data-bind="hero.headlineLead"></span>
+        <span class="block mt-2">
+          <span class="accent font-serif italic font-normal text-ink text-[clamp(72px,22vw,112px)] leading-[0.95]" data-bind="hero.headlineAmount"></span>
+        </span>
+        <span class="block mt-3 text-[clamp(30px,8vw,42px)] leading-[1.05]">
+          <span data-bind="hero.headlineTail"></span>
+          <span class="italic squiggle text-paper" data-bind="hero.headlineAccent"></span>
+        </span>
+      </h1>
+
+    </section>
+
+    <!-- LIVE PERFORMANCE (real data from config.performance.accounts) -->
+    <section class="mt-10 space-y-3">
+
+      <!-- Account card -->
+      <div id="accountCard" class="border border-paper/15 bg-[#0d0d0d]">
+
+        <!-- Invested → Now + pill -->
+        <div class="px-4 pt-5 pb-5">
+
+          <!-- Top meta row: account label + LIVE indicator -->
+          <div class="flex items-center justify-between mb-5">
+            <div class="font-mono text-[9px] uppercase tracking-[0.22em] text-dim">live mt5 account</div>
+            <div class="flex items-center gap-1.5">
+              <span class="relative flex h-1.5 w-1.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blood opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-blood"></span>
+              </span>
+              <span class="font-mono text-[9px] uppercase tracking-[0.22em] text-blood">live</span>
+            </div>
+          </div>
+
+          <!-- INVESTED → NOW grid -->
+          <div class="grid grid-cols-[1fr_auto_1fr] items-end gap-x-3">
+            <!-- INVESTED -->
+            <div class="text-center">
+              <div class="font-mono font-semibold text-[10px] uppercase tracking-[0.22em] text-dim mb-2">invested</div>
+              <div class="font-mono text-[26px] text-paper tabular-nums font-semibold leading-none" id="accountInvested">$0</div>
+            </div>
+            <!-- Growth arrow: clean solid-lime shaft + arrowhead -->
+            <svg class="w-11 h-4 mb-2.5 text-lime" viewBox="0 0 44 16" fill="none" aria-hidden="true">
+              <path d="M2 8 L36 8 M30 2 L40 8 L30 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <!-- NOW -->
+            <div class="text-center">
+              <div class="font-mono font-semibold text-[10px] uppercase tracking-[0.22em] text-dim mb-2">now</div>
+              <div class="font-mono text-[26px] text-lime tabular-nums font-bold leading-none" id="accountCurrent">$0</div>
+            </div>
+          </div>
+
+          <!-- Profit banner: 3-column stat grid -->
+          <div id="accountProfitBadge" class="mt-5 grid grid-cols-3 border border-lime/40 bg-lime/10"></div>
+
+          <!-- Context tag grid -->
+          <div id="accountTags" class="mt-4 grid grid-cols-2 gap-2"></div>
+        </div>
+
+        <!-- Period divider -->
+        <div class="px-4 py-3 border-t border-paper/10 font-mono text-[10px] uppercase tracking-[0.18em] text-dim" id="accountPeriod">—</div>
+
+        <!-- Weekly profit line chart -->
+        <div class="px-4 pt-3 pb-4 border-t border-paper/10">
+          <div class="mb-3 font-mono text-[11px] text-paper font-bold">weekly profit ($)</div>
+          <div id="lineChart" class="relative w-full h-40"></div>
+        </div>
+
+      </div>
+
+      <!-- Weekly Pulse table -->
+      <div class="border border-paper/15 bg-[#0d0d0d]">
+        <div class="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-lime font-bold">
+          weekly pulse
+        </div>
+        <table class="w-full table-fixed">
+          <colgroup>
+            <col style="width:50%" />
+            <col style="width:25%" />
+            <col style="width:25%" />
+          </colgroup>
+          <thead>
+            <tr class="font-mono text-[8.5px] uppercase tracking-widest text-dim border-t border-b border-paper/10">
+              <th class="text-left px-4 py-2.5 font-normal">week range</th>
+              <th class="text-right pl-4 pr-8 py-2.5 font-normal">profit</th>
+              <th class="text-right pl-4 pr-8 py-2.5 font-normal">roi</th>
+            </tr>
+          </thead>
+          <tbody id="weekTableBody" class="font-mono text-[11px] tabular-nums"></tbody>
+          <tfoot id="weekTableFoot" class="font-mono text-[11px] tabular-nums font-bold"></tfoot>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- Divider -->
+    <div class="mt-12 border-t border-paper/10"></div>
+
+    <!-- FORM -->
+    <section id="formSection" class="mt-14">
+      <div class="mb-6">
+        <div class="inline-flex items-center gap-3 mb-4">
+          <img src="./assets/mt5-icon.png" alt="" class="h-11 w-11" />
+          <span class="font-sans font-semibold text-paper text-[20px] tracking-tight leading-none">
+            MetaTrader<span class="text-lime font-bold"> 5</span>
+          </span>
+        </div>
+        <h2 class="font-serif italic text-paper text-4xl leading-none" data-bind="form.title">drop your name.</h2>
+        <p class="mt-2 text-dim text-[15px]" data-bind="form.subtitle"></p>
+      </div>
+
+      <form id="leadForm" novalidate>
+        <div id="formFields" class="space-y-6"></div>
+
+        <button type="submit" id="submitBtn"
+          class="mt-8 w-full bg-lime text-ink font-bold py-5 text-[13px] uppercase tracking-[0.18em] hover:bg-lime/90 active:scale-[0.99] transition-all flex items-center justify-center gap-2 border-2 border-lime">
+          <span id="submitLabel">GET MT5 LOGIN</span>
+          <svg id="submitArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 5l7 7-7 7" />
+          </svg>
+          <svg id="submitSpinner" class="hidden animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M21 12a9 9 0 11-6.219-8.56" />
+          </svg>
+        </button>
+
+        <p id="formError" class="hidden mt-3 text-[13px] text-blood font-mono"></p>
+
+        <p class="mt-4 text-dim text-[11px] font-mono" data-bind="form.privacyNote"></p>
+      </form>
+    </section>
+
+    <!-- REVEAL (hidden) -->
+    <section id="revealSection" class="reveal-hidden mt-14">
+      <div class="sticker bg-ink border-2 border-lime p-6 relative">
+        <!-- Tape strip -->
+        <div
+          class="absolute -top-3 left-6 bg-lime text-ink font-mono text-[10px] font-bold uppercase tracking-widest px-2.5 py-1"
+          data-bind="reveal.badge">LIVE ACCOUNT</div>
+
+        <h3 class="font-serif italic text-paper text-4xl leading-none mt-2" data-bind="reveal.title">here you go.</h3>
+        <p class="mt-2 text-dim text-[13px]" data-bind="reveal.subtitle"></p>
+
+        <div id="credentialsList" class="mt-6 space-y-0 divide-y divide-paper/10 border-y border-paper/10"></div>
+
+        <p class="mt-5 text-dim text-[11px] font-mono leading-relaxed" data-bind="reveal.note"></p>
+      </div>
+    </section>
+
+    <!-- UPSELL (hidden) -->
+    <section id="upsellSection" class="reveal-hidden mt-10">
+      <div class="border border-paper/15 p-6">
+        <h3 class="font-serif text-paper text-3xl leading-tight" data-bind-html="upsell.headline"></h3>
+        <p class="mt-2 text-dim text-sm" data-bind="upsell.subheadline"></p>
+
+        <ul id="upsellFeatures" class="mt-5 space-y-2.5"></ul>
+
+        <a id="upsellBtn" target="_blank" rel="noopener"
+          class="mt-6 w-full bg-paper text-ink font-bold py-5 text-[13px] uppercase tracking-[0.18em] hover:bg-lime active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+          <span data-bind="upsell.buttonText">GET THE ALGO</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- FINAL CTA (always visible) -->
+    <section class="mt-16 pt-10 pb-2 border-t border-paper/10 text-center">
+      <h3 class="font-serif italic text-paper text-[clamp(28px,7vw,36px)] leading-[1.1]" data-bind="finalCta.headline">—</h3>
+      <p class="mt-3 text-dim text-[14px] leading-relaxed max-w-[32ch] mx-auto" data-bind="finalCta.subheadline">—</p>
+      <a id="finalCtaBtn" target="_blank" rel="noopener"
+        class="mt-7 inline-flex w-full items-center justify-center gap-2 bg-lime text-ink font-bold py-5 px-6 text-[13px] uppercase tracking-[0.18em] hover:bg-lime/90 active:scale-[0.99] transition-all border-2 border-lime">
+        <span data-bind="finalCta.buttonText">DEPLOY</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M13 5l7 7-7 7" />
+        </svg>
+      </a>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="max-w-[480px] mx-auto px-5 pb-8 pt-4 mt-8">
+    <p class="font-mono text-[10px] text-dim leading-relaxed" data-bind="footer.disclaimer"></p>
+    <p class="font-mono text-[10px] text-dim/60 mt-3" data-bind="footer.copyright"></p>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast"
+    class="fixed left-1/2 -translate-x-1/2 bottom-6 bg-lime text-ink font-mono text-[11px] font-bold uppercase tracking-widest px-4 py-2.5 opacity-0 pointer-events-none transition-opacity z-50">
+    copied
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,194 @@
+{
+  "brand": {
+    "name": "Ziddi Trader",
+    "handle": "@ziditrader",
+    "logo": "./assets/LOGO.jpg"
+  },
+  "ticker": [
+    "LIVE ON MT5",
+    "+$906 IN 10 WEEKS",
+    "+60.4% ROI",
+    "2,167 TRADES · 52.0% WIN",
+    "OUTPERFORMED 300+ STRATEGIES",
+    "BUILT FOR XAU/USD"
+  ],
+  "hero": {
+    "snapshots": [
+      {
+        "headlineLead": "earned",
+        "headlineAmount": "$906",
+        "headlineTail": "in 10 weeks.",
+        "headlineAccent": "fully automated."
+      },
+      {
+        "headlineLead": "made",
+        "headlineAmount": "$906",
+        "headlineTail": "since february.",
+        "headlineAccent": "+60.4% ROI."
+      },
+      {
+        "headlineLead": "profit of",
+        "headlineAmount": "$906",
+        "headlineTail": "with one algo.",
+        "headlineAccent": "zero manual work."
+      },
+      {
+        "headlineLead": "gained",
+        "headlineAmount": "$906",
+        "headlineTail": "without any clicks.",
+        "headlineAccent": "algo did it all."
+      },
+      {
+        "headlineLead": "got",
+        "headlineAmount": "$906",
+        "headlineTail": "from live trading.",
+        "headlineAccent": "one winning algo."
+      },
+      {
+        "headlineLead": "made",
+        "headlineAmount": "$906",
+        "headlineTail": "since february.",
+        "headlineAccent": "no screen time needed."
+      }
+    ]
+  },
+  "performance": {
+    "account": {
+      "invested": 1500,
+      "current": 2406,
+      "netProfit": 906,
+      "roiPct": 60.4,
+      "periodLabel": "Feb 2026 – Apr 2026",
+      "tags": [
+        "XAU/USD",
+        "MT5 live",
+        "fully automated",
+        "investor verifiable"
+      ],
+      "weeks": [
+        {
+          "range": "11–13 Feb 26",
+          "profit": 115,
+          "roi": 7.7
+        },
+        {
+          "range": "16–20 Feb 26",
+          "profit": 149,
+          "roi": 9.9
+        },
+        {
+          "range": "23–27 Feb 26",
+          "profit": 71,
+          "roi": 4.8
+        },
+        {
+          "range": "3–6 Mar 26",
+          "profit": 153,
+          "roi": 10.2
+        },
+        {
+          "range": "9–13 Mar 26",
+          "profit": 133,
+          "roi": 8.8
+        },
+        {
+          "range": "16–19 Mar 26",
+          "profit": 60,
+          "roi": 4.0
+        },
+        {
+          "range": "23–27 Mar 26",
+          "profit": 73,
+          "roi": 4.9
+        },
+        {
+          "range": "31 Mar–2 Apr 26",
+          "profit": 83,
+          "roi": 5.5
+        },
+        {
+          "range": "6–10 Apr 26",
+          "profit": 95,
+          "roi": 6.3
+        },
+        {
+          "range": "13–15 Apr 26",
+          "profit": -25,
+          "roi": -1.6
+        }
+      ]
+    }
+  },
+  "form": {
+    "title": "want to see my live algo on MT5?",
+    "subtitle": "enter your name and whatsapp number. i'll share my MT5 account details.",
+    "fields": [
+      {
+        "name": "name",
+        "label": "name",
+        "type": "text",
+        "placeholder": "enter your full name",
+        "required": true,
+        "minLength": 3,
+        "maxLength": 60
+      },
+      {
+        "name": "mobile",
+        "label": "whatsapp number",
+        "type": "tel",
+        "placeholder": "enter 10-digit number",
+        "required": true,
+        "pattern": "^[0-9]{10}$",
+        "minLength": 10,
+        "maxLength": 10,
+        "errorMessage": "please enter a valid 10-digit number"
+      }
+    ],
+    "submitText": "GET MT5 LOGIN",
+    "submittingText": "sending...",
+    "apiEndpoint": "https://goctechnology.com/gocglobalAlgo/InfluencerLead",
+    "errorText": "something went wrong. please try again.",
+    "privacyNote": "no spam. only the login and useful updates."
+  },
+  "reveal": {
+    "badge": "LIVE ACCOUNT",
+    "title": "here you go.",
+    "subtitle": "open MT5 · login · verify every trade live.",
+    "credentials": [
+      {
+        "label": "login",
+        "value": "250213",
+        "copy": true
+      },
+      {
+        "label": "password",
+        "value": "@Goc2026",
+        "copy": true
+      },
+      {
+        "label": "server",
+        "value": "NeweraCapitalMarket-Liv",
+        "copy": true
+      }
+    ],
+    "note": "investor password. read-only you can view trades, not modify them."
+  },
+  "upsell": {
+    "headline": "want this running on <em>your</em> account?",
+    "subheadline": "",
+    "features": [
+      "1 year live-tested · outperformed 300+ strategies",
+      "2,167 trades · 52.0% win · +60.4% ROI",
+      "built for XAU/USD",
+      "10-min MT5 setup · lifetime access"
+    ],
+    "buttonText": "GET THE ALGO",
+    "buttonUrl": "https://goctechnology.com/gocglobalalgo"
+  },
+  "finalCta": {
+    "headline": "want this algorithm?",
+    "subheadline": "click below to buy this algorithm for your account.",
+    "buttonText": "GET THE ALGORITHM",
+    "buttonUrl": "https://goctechnology.com/gocglobalalgo"
+  }
+}
