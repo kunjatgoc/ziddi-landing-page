@@ -6,7 +6,7 @@
   },
   "ticker": [
     "LIVE ON MT5",
-    "+$906 IN 10 WEEKS",
+    "+$916 IN 10 WEEKS",
     "+60.4% ROI",
     "2,167 TRADES · 52.0% WIN",
     "OUTPERFORMED 300+ STRATEGIES",
@@ -16,37 +16,37 @@
     "snapshots": [
       {
         "headlineLead": "earned",
-        "headlineAmount": "$906",
+        "headlineAmount": "$916",
         "headlineTail": "in 10 weeks.",
         "headlineAccent": "fully automated."
       },
       {
         "headlineLead": "made",
-        "headlineAmount": "$906",
+        "headlineAmount": "$916",
         "headlineTail": "since february.",
         "headlineAccent": "+60.4% ROI."
       },
       {
         "headlineLead": "profit of",
-        "headlineAmount": "$906",
+        "headlineAmount": "$916",
         "headlineTail": "with one algo.",
         "headlineAccent": "zero manual work."
       },
       {
         "headlineLead": "gained",
-        "headlineAmount": "$906",
+        "headlineAmount": "$916",
         "headlineTail": "without any clicks.",
         "headlineAccent": "algo did it all."
       },
       {
         "headlineLead": "got",
-        "headlineAmount": "$906",
+        "headlineAmount": "$916",
         "headlineTail": "from live trading.",
         "headlineAccent": "one winning algo."
       },
       {
         "headlineLead": "made",
-        "headlineAmount": "$906",
+        "headlineAmount": "$916",
         "headlineTail": "since february.",
         "headlineAccent": "no screen time needed."
       }
@@ -56,7 +56,7 @@
     "account": {
       "invested": 1500,
       "current": 2406,
-      "netProfit": 906,
+      "netProfit": 916,
       "roiPct": 60.4,
       "periodLabel": "Feb 2026 – Apr 2026",
       "tags": [
@@ -183,12 +183,16 @@
       "10-min MT5 setup · lifetime access"
     ],
     "buttonText": "GET THE ALGO",
-    "buttonUrl": "https://goctechnology.com/gocglobalalgo"
+    "buttonUrl": "https://goctechnology.com/gocglobalalgo?aid=B1TCP661TZ"
   },
   "finalCta": {
     "headline": "want this algorithm?",
     "subheadline": "click below to buy this algorithm for your account.",
     "buttonText": "GET THE ALGORITHM",
-    "buttonUrl": "https://goctechnology.com/gocglobalalgo"
+    "buttonUrl": "https://goctechnology.com/gocglobalalgo?aid=B1TCP661TZ"
+  },
+  "footer": {
+    "disclaimer": "trading forex carries substantial risk. past performance shown above is from a single live MT5 account and does not guarantee future results. deploy only capital you can afford to lose. the MT5 login shared on this page is read-only (investor access) — it is for verification, not for running trades on.",
+    "copyright": "© 2026 Ziddi Trader · all rights reserved."
   }
 }
