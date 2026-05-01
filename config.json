@@ -4,11 +4,15 @@
     "handle": "@ziditrader",
     "logo": "./assets/LOGO.jpg"
   },
+  "dataSource": {
+    "url": "/api/algos.json",
+    "algoId": "global-algo-3"
+  },
   "ticker": [
     "LIVE ON MT5",
-    "+$916 IN 10 WEEKS",
-    "+60.4% ROI",
-    "2,167 TRADES · 52.0% WIN",
+    "{netProfitSigned} IN {weeksCount} WEEKS",
+    "{roiSigned} ROI",
+    "{trades} TRADES · {winPct} WIN",
     "OUTPERFORMED 300+ STRATEGIES",
     "BUILT FOR XAU/USD"
   ],
@@ -16,37 +20,37 @@
     "snapshots": [
       {
         "headlineLead": "earned",
-        "headlineAmount": "$916",
-        "headlineTail": "in 10 weeks.",
+        "headlineAmount": "{netProfit}",
+        "headlineTail": "in {weeksCount} weeks.",
         "headlineAccent": "fully automated."
       },
       {
         "headlineLead": "made",
-        "headlineAmount": "$916",
+        "headlineAmount": "{netProfit}",
         "headlineTail": "since february.",
-        "headlineAccent": "+60.4% ROI."
+        "headlineAccent": "{roiSigned} ROI."
       },
       {
         "headlineLead": "profit of",
-        "headlineAmount": "$916",
+        "headlineAmount": "{netProfit}",
         "headlineTail": "with one algo.",
         "headlineAccent": "zero manual work."
       },
       {
         "headlineLead": "gained",
-        "headlineAmount": "$916",
+        "headlineAmount": "{netProfit}",
         "headlineTail": "without any clicks.",
         "headlineAccent": "algo did it all."
       },
       {
         "headlineLead": "got",
-        "headlineAmount": "$916",
+        "headlineAmount": "{netProfit}",
         "headlineTail": "from live trading.",
         "headlineAccent": "one winning algo."
       },
       {
         "headlineLead": "made",
-        "headlineAmount": "$916",
+        "headlineAmount": "{netProfit}",
         "headlineTail": "since february.",
         "headlineAccent": "no screen time needed."
       }
@@ -54,68 +58,11 @@
   },
   "performance": {
     "account": {
-      "invested": 1500,
-      "current": 2406,
-      "netProfit": 916,
-      "roiPct": 60.4,
-      "periodLabel": "Feb 2026 – Apr 2026",
       "tags": [
         "XAU/USD",
         "MT5 live",
         "fully automated",
         "investor verifiable"
-      ],
-      "weeks": [
-        {
-          "range": "11–13 Feb 26",
-          "profit": 115,
-          "roi": 7.7
-        },
-        {
-          "range": "16–20 Feb 26",
-          "profit": 149,
-          "roi": 9.9
-        },
-        {
-          "range": "23–27 Feb 26",
-          "profit": 71,
-          "roi": 4.8
-        },
-        {
-          "range": "3–6 Mar 26",
-          "profit": 153,
-          "roi": 10.2
-        },
-        {
-          "range": "9–13 Mar 26",
-          "profit": 133,
-          "roi": 8.8
-        },
-        {
-          "range": "16–19 Mar 26",
-          "profit": 60,
-          "roi": 4.0
-        },
-        {
-          "range": "23–27 Mar 26",
-          "profit": 73,
-          "roi": 4.9
-        },
-        {
-          "range": "31 Mar–2 Apr 26",
-          "profit": 83,
-          "roi": 5.5
-        },
-        {
-          "range": "6–10 Apr 26",
-          "profit": 95,
-          "roi": 6.3
-        },
-        {
-          "range": "13–15 Apr 26",
-          "profit": -25,
-          "roi": -1.6
-        }
       ]
     }
   },
@@ -178,7 +125,7 @@
     "subheadline": "",
     "features": [
       "1 year live-tested · outperformed 300+ strategies",
-      "2,167 trades · 52.0% win · +60.4% ROI",
+      "{trades} trades · {winPct} win · {roiSigned} ROI",
       "built for XAU/USD",
       "10-min MT5 setup · lifetime access"
     ],
@@ -192,6 +139,7 @@
     "buttonUrl": "https://goctechnology.com/gocglobalalgo?aid=B1TCP661TZ"
   },
   "footer": {
+    "disclaimer": "trading forex carries substantial risk. past performance shown above is from a single live MT5 account and does not guarantee future results. deploy only capital you can afford to lose. the MT5 login shared on this page is read-only (investor access) — it is for verification, not for running trades on.",
     "copyright": "© 2026 Ziddi Trader · all rights reserved."
   }
 }

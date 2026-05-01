@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/algos.json",
+      "destination": "https://goctechnology.com/gocglobalalgo/data/algos.json"
+    }
+  ]
+}

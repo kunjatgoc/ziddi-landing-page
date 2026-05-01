@@ -36,11 +36,12 @@
   </script>
 
   <style>
-    html, body { background: #0a0a0a; color: #e8e6e0; overflow-x: clip; }
+    html, body { background: #0a0a0a; color: #e8e6e0; }
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       padding-bottom: env(safe-area-inset-bottom);
+      overflow-x: hidden;
     }
     body::before {
       content: ''; position: fixed; inset: 0;
@@ -337,6 +338,7 @@
   </main>
 
   <footer id="siteFooter" class="max-w-[480px] mx-auto px-5 pb-8 pt-4 mt-8">
+    <p class="font-mono text-[11px] text-dim leading-relaxed" data-bind="footer.disclaimer"></p>
     <p class="font-mono text-[11px] text-dim/60 mt-3" data-bind="footer.copyright"></p>
   </footer>
 

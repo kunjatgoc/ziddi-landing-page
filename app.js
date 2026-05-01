@@ -195,6 +195,75 @@
     }
   }
 
+  /* ========== Live algo feed ========== */
+
+  const signedMoney = v => (v >= 0 ? '+$' : '-$') + Math.abs(Math.round(v)).toLocaleString('en-US');
+  const signedPct   = v => (v >= 0 ? '+' : '') + Number(v).toFixed(1) + '%';
+
+  function buildTokens(algo) {
+    const stats  = algo.stats  || {};
+    const totals = algo.totals || {};
+    const weeksCount = Array.isArray(algo.weekly) ? algo.weekly.length : 0;
+    const np  = (stats.net_profit  && stats.net_profit.value)  || 0;
+    const roi = (stats.return_pct  && stats.return_pct.value)  || 0;
+    return {
+      netProfit:       (stats.net_profit && stats.net_profit.display) || `$${fmtInt(Math.round(np))}`,
+      netProfitSigned: signedMoney(np),
+      roi:             (stats.return_pct && stats.return_pct.display) || `${roi.toFixed(1)}%`,
+      roiSigned:       signedPct(roi),
+      trades:          (totals.trades  && totals.trades.display)  || fmtInt(totals.trades && totals.trades.value || 0),
+      winPct:          (totals.win_pct && totals.win_pct.display) || `${(totals.win_pct && totals.win_pct.value || 0).toFixed(1)}%`,
+      weeksCount:      String(weeksCount)
+    };
+  }
+
+  function applyTokens(str, tokens) {
+    if (typeof str !== 'string') return str;
+    return str.replace(/\{(\w+)\}/g, (_, k) => (k in tokens ? tokens[k] : `{${k}}`));
+  }
+
+  function applyTokensDeep(value, tokens) {
+    if (typeof value === 'string') return applyTokens(value, tokens);
+    if (Array.isArray(value)) return value.map(v => applyTokensDeep(v, tokens));
+    if (value && typeof value === 'object') {
+      const out = {};
+      for (const k in value) out[k] = applyTokensDeep(value[k], tokens);
+      return out;
+    }
+    return value;
+  }
+
+  function mapAccountFromAlgo(algo, tags) {
+    const invested  = (algo.stats && algo.stats.invested && algo.stats.invested.value) || 0;
+    const netProfit = (algo.stats && algo.stats.net_profit && algo.stats.net_profit.value) || 0;
+    return {
+      id:          algo.id || 'live',
+      invested,
+      netProfit,
+      current:     invested + netProfit,
+      roiPct:      (algo.stats && algo.stats.return_pct && algo.stats.return_pct.value) || 0,
+      periodLabel: (algo.meta && algo.meta.period_label) || '',
+      tags:        Array.isArray(tags) ? tags : [],
+      weeks: (Array.isArray(algo.weekly) ? algo.weekly : []).map(w => ({
+        range:  w.week,
+        profit: (w.ret_dollar && w.ret_dollar.value) || 0,
+        roi:    (w.ret_pct    && w.ret_pct.value)    || 0
+      }))
+    };
+  }
+
+  async function fetchLiveAlgo(dataSource) {
+    if (!dataSource || !dataSource.url || !dataSource.algoId) {
+      throw new Error('dataSource.url / dataSource.algoId missing in config');
+    }
+    const res = await fetch(dataSource.url, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const algos = await res.json();
+    const algo = (Array.isArray(algos) ? algos : []).find(a => a.id === dataSource.algoId);
+    if (!algo) throw new Error(`algo "${dataSource.algoId}" not found in feed`);
+    return algo;
+  }
+
   function initPerformance(perf) {
     const account = perf && perf.account;
     if (!account) return;
@@ -536,6 +605,13 @@
     }
   }
 
+  function fatalScreen(title, err, hint) {
+    const hintHtml = hint ? `<p style="color:#5a5a54;font-size:12px;margin:20px 0 0">${hint}</p>` : '';
+    document.body.innerHTML = `<div style="padding:40px 20px;color:#e8e6e0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;text-align:center">
+      <h2 style="color:#ff3a3a;font-size:28px;font-weight:700;margin:0 0 12px">${title}</h2>
+      <p style="color:#8a8a83;font-size:14px;margin:12px 0 0">${err.message}</p>${hintHtml}</div>`;
+  }
+
   async function boot() {
     let config;
     try {
@@ -544,12 +620,26 @@
       config = await res.json();
     } catch (err) {
       console.error('config load failed:', err);
-      document.body.innerHTML = `<div style="padding:40px 20px;color:#e8e6e0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;text-align:center">
-        <h2 style="color:#ff3a3a;font-size:28px;font-weight:700;margin:0 0 12px">couldn't load config.</h2>
-        <p style="color:#8a8a83;font-size:14px;margin:12px 0 0">${err.message}</p>
-        <p style="color:#5a5a54;font-size:12px;margin:20px 0 0">serve via a local web server, not file://</p></div>`;
+      fatalScreen('couldn’t load config.', err, 'serve via a local web server, not file://');
       return;
     }
+
+    let algo;
+    try {
+      algo = await fetchLiveAlgo(config.dataSource);
+    } catch (err) {
+      console.error('live algo feed load failed:', err);
+      fatalScreen('live data unavailable.', err);
+      return;
+    }
+
+    const staticTags = (config.performance && config.performance.account && config.performance.account.tags) || [];
+    config.performance = { account: mapAccountFromAlgo(algo, staticTags) };
+
+    const tokens = buildTokens(algo);
+    if (Array.isArray(config.ticker)) config.ticker = applyTokensDeep(config.ticker, tokens);
+    if (config.hero && Array.isArray(config.hero.snapshots)) config.hero.snapshots = applyTokensDeep(config.hero.snapshots, tokens);
+    if (config.upsell && Array.isArray(config.upsell.features)) config.upsell.features = applyTokensDeep(config.upsell.features, tokens);
 
     hydrateDynamic(config);
     bindConfig(config);
