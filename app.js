@@ -256,7 +256,13 @@
     if (!dataSource || !dataSource.url || !dataSource.algoId) {
       throw new Error('dataSource.url / dataSource.algoId missing in config');
     }
-    const res = await fetch(dataSource.url, { cache: 'no-store' });
+    // Cache-bust so CDNs / proxies always return the freshest weekly data
+    const sep = dataSource.url.includes('?') ? '&' : '?';
+    const url = `${dataSource.url}${sep}t=${Date.now()}`;
+    const res = await fetch(url, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+    });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const algos = await res.json();
     const algo = (Array.isArray(algos) ? algos : []).find(a => a.id === dataSource.algoId);

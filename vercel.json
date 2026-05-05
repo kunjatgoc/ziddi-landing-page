@@ -4,5 +4,24 @@
       "source": "/api/algos.json",
       "destination": "https://goctechnology.com/gocglobalalgo/data/algos.json"
     }
+  ],
+  "headers": [
+    {
+      "source": "/api/algos.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, s-maxage=0, must-revalidate"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "Vercel-CDN-Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
   ]
 }
